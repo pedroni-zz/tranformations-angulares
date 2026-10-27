@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador y Conversor de Sistemas Angulares</title>
+    <!-- Tailwind CSS desde CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 antialiased p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto space-y-8">
+        
+        <!-- Encabezado -->
+        <header class="text-center space-y-2">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                📐 Generador y Conversor de Sistemas Angulares
+            </h1>
+            <p class="text-slate-600 max-w-2xl mx-auto text-sm md:text-base">
+                Plataforma de práctica e interacción para el cálculo y conversión de ángulos en los sistemas 
+                <span class="font-semibold text-brand-600">Sexagesimal</span>, 
+                <span class="font-semibold text-brand-600">Centesimal</span> y 
+                <span class="font-semibold text-brand-600">Radial</span>.
+            </p>
+        </header>
+
+        <!-- Sección de Conversión Interactiva y Gráfico -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            <!-- Formulario de Conversión -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
+                <h2 class="text-xl font-bold text-slate-900 border-b border-slate-100 pb-3">
+                    🔄 Conversor en Tiempo Real
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">
+                            Sistema Sexagesimal (Grados Decimales °)
+                        </label>
+                        <input type="number" id="input-deg" step="any" placeholder="Ej. 45.5" 
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">
+                            Sistema Sexagesimal (Grados, Minutos, Segundos)
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="number" id="input-dms-d" placeholder="Grados °" class="px-3 py-2 border rounded-lg text-center">
+                            <input type="number" id="input-dms-m" placeholder="Min '" class="px-3 py-2 border rounded-lg text-center">
+                            <input type="number" id="input-dms-s" step="any" placeholder="Seg &quot;" class="px-3 py-2 border rounded-lg text-center">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">
+                            Sistema Centesimal (Gonianes / Gon)
+                        </label>
+                        <input type="number" id="input-grad" step="any" placeholder="Ej. 50.55" 
+                               class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">
+                            Sistema Radial (Radianes rad)
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="number" id="input-rad" step="any" placeholder="Ej. 0.7854" 
+                                   class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition">
+                            <span id="label-pi" class="px-4 py-2.5 bg-slate-100 rounded-xl font-mono text-sm text-slate-600 flex items-center justify-center min-w-[100px]">
+                                0.0000 π
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lienzo de Visualización Gráfica -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center space-y-4">
+                <h2 class="text-xl font-bold text-slate-900 w-full text-left border-b border-slate-100 pb-3">
+                    🎯 Representación Geométrica
+                </h2>
+                <canvas id="angleCanvas" width="300" height="300" class="border border-slate-200 rounded-xl bg-slate-50 cursor-pointer"></canvas>
+                <p class="text-xs text-slate-500 text-center">
+                    💡 Haz clic o arrastra sobre el círculo para ajustar el ángulo manualmente.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Generador de Ejercicios Prácticos para Alumnos -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">
+                        🎲 Banco de Ejercicios Prácticos
+                    </h2>
+                    <p class="text-sm text-slate-500">
+                        Genera reactivos aleatorios para autoevaluación con respuestas paso a paso.
+                    </p>
+                </div>
+                <button id="btn-generate" 
+                        class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-xl shadow-sm transition active:scale-95 flex items-center justify-center gap-2">
+                    🔄 Generar Batería de Ejercicios
+                </button>
+            </div>
+
+            <div id="exercise-container" class="space-y-4">
+                <!-- Se llenará dinámicamente con JavaScript -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Script de Funcionalidad e Interacción -->
+    <script>
+        const canvas = document.getElementById('angleCanvas');
+        const ctx = canvas.getContext('2d');
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 100;
+
+        let currentDegrees = 45;
+        let isDragging = false;
+
+        // Referencias a inputs
+        const inputDeg = document.getElementById('input-deg');
+        const inputDmsD = document.getElementById('input-dms-d');
+        const inputDmsM = document.getElementById('input-dms-m');
+        const inputDmsS = document.getElementById('input-dms-s');
+        const inputGrad = document.getElementById('input-grad');
+        const inputRad = document.getElementById('input-rad');
+        const labelPi = document.getElementById('label-pi');
+
+        function updateFromDegrees(deg, source) {
+            currentDegrees = ((deg % 360) + 360) % 360;
+
+            if (source !== 'deg') inputDeg.value = currentDegrees.toFixed(4);
+            
+            // DMS
+            const d = Math.floor(currentDegrees);
+            const mFloat = (currentDegrees - d) * 60;
+            const m = Math.floor(mFloat);
+            const s = (mFloat - m) * 60;
+
+            if (source !== 'dms') {
+                inputDmsD.value = d;
+                inputDmsM.value = m;
+                inputDmsS.value = s.toFixed(2);
+            }
+
+            // Gradián
+            const grads = currentDegrees * (200 / 180);
+            if (source !== 'grad') inputGrad.value = grads.toFixed(4);
+
+            // Radianes
+            const rads = currentDegrees * (Math.PI / 180);
+            if (source !== 'rad') inputRad.value = rads.toFixed(4);
+            labelPi.innerText = `${(rads / Math.PI).toFixed(4)} π`;
+
+            drawAngle();
+        }
+
+        function drawAngle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Plano cartesiano
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(centerX, 10); ctx.lineTo(centerX, canvas.height - 10);
+            ctx.moveTo(10, centerY); ctx.lineTo(canvas.width - 10, centerY);
+            ctx.stroke();
+
+            // Círculo base
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.stroke();
+
+            const radAngle = currentDegrees * (Math.PI / 180);
+
+            // Lado Inicial (Eje X positivo)
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(centerX + radius, centerY);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Lado Terminal
+            const termX = centerX + radius * Math.cos(-radAngle);
+            const termY = centerY + radius * Math.sin(-radAngle);
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(termX, termY);
+            ctx.strokeStyle = '#4f46e5';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Arco del ángulo
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 30, 0, -radAngle, true);
+            ctx.fillStyle = 'rgba(99, 102, 241, 0.2)';
+            ctx.fill();
+            ctx.strokeStyle = '#6366f1';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        // Eventos de interacción con el lienzo
+        function handleCanvasPointer(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left - centerX;
+            const y = e.clientY - rect.top - centerY;
+            
+            let angleRad = Math.atan2(-y, x);
+            let angleDeg = angleRad * (180 / Math.PI);
+            if (angleDeg < 0) angleDeg += 360;
+
+            updateFromDegrees(angleDeg, 'canvas');
+        }
+
+        canvas.addEventListener('mousedown', (e) => { isDragging = true; handleCanvasPointer(e); });
+        canvas.addEventListener('mousemove', (e) => { if (isDragging) handleCanvasPointer(e); });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // Eventos para inputs
+        inputDeg.addEventListener('input', (e) => updateFromDegrees(parseFloat(e.target.value) || 0, 'deg'));
+        
+        function updateFromDMS() {
+            const d = parseFloat(inputDmsD.value) || 0;
+            const m = parseFloat(inputDmsM.value) || 0;
+            const s = parseFloat(inputDmsS.value) || 0;
+            const deg = d + (m / 60) + (s / 3600);
+            updateFromDegrees(deg, 'dms');
+        }
+
+        [inputDmsD, inputDmsM, inputDmsS].forEach(el => el.addEventListener('input', updateFromDMS));
+        
+        inputGrad.addEventListener('input', (e) => {
+            const grads = parseFloat(e.target.value) || 0;
+            updateFromDegrees(grads * (180 / 200), 'grad');
+        });
+
+        inputRad.addEventListener('input', (e) => {
+            const rads = parseFloat(e.target.value) || 0;
+            updateFromDegrees(rads * (180 / Math.PI), 'rad');
+        });
+
+        // Generador de Batería de Ejercicios
+        function generateExercises() {
+            const container = document.getElementById('exercise-container');
+            container.innerHTML = '';
+
+            const types = [
+                { from: 'sexagesimal', to: 'centesimal' },
+                { from: 'sexagesimal', to: 'radial' },
+                { from: 'centesimal', to: 'sexagesimal' },
+                { from: 'radial', to: 'sexagesimal' }
+            ];
+
+            for (let i = 1; i <= 5; i++) {
+                const deg = Math.floor(Math.random() * 350) + 10;
+                const type = types[Math.floor(Math.random() * types.length)];
+
+                let val, sourceName, targetName, answer, step;
+
+                if (type.from === 'sexagesimal') {
+                    val = `${deg}°`;
+                    sourceName = 'Sexagesimal';
+                    if (type.to === 'centesimal') {
+                        targetName = 'Centesimal (gon)';
+                        const res = deg * (200 / 180);
+                        answer = `${res.toFixed(2)} gon`;
+                        step = `${deg}° × (200 gon / 180°) = ${res.toFixed(2)} gon`;
+                    } else {
+                        targetName = 'Radianes (rad)';
+                        const rad = deg * (Math.PI / 180);
+                        answer = `${rad.toFixed(4)} rad (${(deg/180).toFixed(2)}π rad)`;
+                        step = `${deg}° × (π / 180°) = ${rad.toFixed(4)} rad`;
+                    }
+                } else if (type.from === 'centesimal') {
+                    const grads = deg * (200 / 180);
+                    val = `${grads.toFixed(2)} gon`;
+                    sourceName = 'Centesimal';
+                    targetName = 'Sexagesimal (°)';
+                    answer = `${deg.toFixed(2)}°`;
+                    step = `${grads.toFixed(2)} gon × (180° / 200 gon) = ${deg.toFixed(2)}°`;
+                } else {
+                    const rad = deg * (Math.PI / 180);
+                    val = `${rad.toFixed(2)} rad`;
+                    sourceName = 'Radianes';
+                    targetName = 'Sexagesimal (°)';
+                    const res = rad * (180 / Math.PI);
+                    answer = `${res.toFixed(2)}°`;
+                    step = `${rad.toFixed(2)} rad × (180° / π) = ${res.toFixed(2)}°`;
+                }
+
+                const el = document.createElement('div');
+                el.className = 'p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3';
+                el.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-slate-800">Ejercicio #${i}</span>
+                        <span class="text-xs font-semibold px-2.5 py-1 bg-brand-50 text-brand-700 rounded-full">
+                            Convertir de ${sourceName} a ${targetName}
+                        </span>
+                    </div>
+                    <p class="text-sm text-slate-700">
+                        Convierte el ángulo <span class="font-bold text-slate-900">${val}</span> al sistema <span class="font-bold text-slate-900">${targetName}</span>.
+                    </p>
+                    <details class="text-xs text-slate-600">
+                        <summary class="cursor-pointer font-medium text-brand-600 hover:text-brand-700 select-none">
+                            Ver Respuesta y Solución Paso a Paso
+                        </summary>
+                        <div class="mt-2 p-3 bg-white rounded-lg border border-slate-200 space-y-1 font-mono">
+                            <p class="font-bold text-emerald-600">Respuesta: ${answer}</p>
+                            <p class="text-slate-500">Procedimiento: ${step}</p>
+                        </div>
+                    </details>
+                `;
+                container.appendChild(el);
+            }
+        }
+
+        document.getElementById('btn-generate').addEventListener('click', generateExercises);
+
+        // Inicialización
+        updateFromDegrees(45, 'init');
+        generateExercises();
+    </script>
+</body>
+</html>
